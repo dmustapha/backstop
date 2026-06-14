@@ -16,11 +16,17 @@ class Store {
   private seq = 0;
 
   constructor() {
-    try {
-      const raw = JSON.parse(readFileSync(PERSIST_PATH, "utf8")) as { seq?: number; items?: VerdictDTO[] };
-      this.items = Array.isArray(raw.items) ? raw.items.slice(0, MAX_ITEMS) : [];
-      this.seq = typeof raw.seq === "number" ? raw.seq : this.items.length;
-    } catch { /* no store file yet → start empty */ }
+    // Load the live persisted feed first; on a fresh host (no store yet) fall back to the
+    // committed seed of real on-chain verdicts so a cold deploy boots with demo history.
+    const SEED_PATH = `${process.cwd()}/keeper/seed-verdicts.json`;
+    for (const path of [PERSIST_PATH, SEED_PATH]) {
+      try {
+        const raw = JSON.parse(readFileSync(path, "utf8")) as { seq?: number; items?: VerdictDTO[] };
+        this.items = Array.isArray(raw.items) ? raw.items.slice(0, MAX_ITEMS) : [];
+        this.seq = typeof raw.seq === "number" ? raw.seq : this.items.length;
+        if (this.items.length) break;
+      } catch { /* try next source, else start empty */ }
+    }
   }
 
   private persist(): void {

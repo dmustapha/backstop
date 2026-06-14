@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: backstop-keeper
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm run keeper
+    healthCheckPath: /verdicts
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: RECOVERY_DELAY_BLOCKS
+        value: "150"
+      # Secrets — set in the Render dashboard (Environment tab). Never committed.
+      - key: MANTLE_RPC_URL
+        sync: false
+      - key: GUARDIAN_KEY
+        sync: false
+      - key: GUARDIAN_ADDRESS
+        sync: false
+      - key: DEMO_AGENT_KEY
+        sync: false
+      - key: DEMO_AGENT_ADDRESS
+        sync: false
+      - key: FACTORY_ADDRESS
+        sync: false
+      - key: STATIC_DRAINERS
+        sync: false
+      - key: DEMO_EVIL_ADDRESS
+        sync: false
+      - key: DEMO_UNKNOWN_ADDRESS
+        sync: false
+      - key: DEMO_INJECTED_SPENDER
+        sync: false
+      - key: NEXT_PUBLIC_DEMO_ACCOUNT
+        sync: false
+      - key: LLM_BASE_URL
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        sync: false
+      - key: LLM_FALLBACK
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        sync: false

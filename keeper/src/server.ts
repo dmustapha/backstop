@@ -9,7 +9,7 @@ import { submitVeto } from "./veto";
 import { store } from "./store";
 import type { PendingCall, ProposeRequest, SimulateRequest, Verdict, VerdictDTO } from "../../shared/types";
 
-const PORT = Number(process.env.KEEPER_PORT ?? 8787);
+const PORT = Number(process.env.PORT ?? process.env.KEEPER_PORT ?? 8787);
 
 // [debug fix #5] Per-account serialization lock for the cosign/veto critical section. Two concurrent
 // /propose calls for the same account would otherwise both read the same on-chain nonce and receive
