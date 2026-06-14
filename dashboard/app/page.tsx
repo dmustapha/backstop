@@ -25,7 +25,9 @@ export default function Landing() {
   return (
     <>
       {/* ── HERO ── */}
-      <section className="relative mx-auto min-h-[100dvh] max-w-[1140px] px-6 pb-24 pt-16 sm:pt-24">
+      {/* overflow-x:clip contains the decorative .hero-glow (520px absolute, right:-60px) so it
+          cannot extend page width on narrow viewports — body's clip alone doesn't reach <html>. */}
+      <section className="relative mx-auto min-h-[100dvh] max-w-[1140px] px-6 pb-24 pt-16 sm:pt-24" style={{ overflowX: "clip" }}>
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
           <div className="min-w-0 flex-1">
             <p className="section-tag anim-rise">Filed · Mantle Sepolia · chainId 5003</p>
@@ -140,7 +142,7 @@ export default function Landing() {
 
             <div className="flex shrink-0 gap-4">
               <IdCard label="Guardian" id="182" />
-              <IdCard label="Guarded agent" id="183" />
+              <IdCard label="Guarded agent" id="183" href="/agent/183" />
             </div>
           </div>
         </div>
@@ -149,14 +151,18 @@ export default function Landing() {
   );
 }
 
-function IdCard({ label, id }: { label: string; id: string }) {
-  return (
-    <div className="filing flex w-[150px] flex-col items-center p-6 text-center">
+function IdCard({ label, id, href }: { label: string; id: string; href?: string }) {
+  const body = (
+    <div className={`filing flex w-[150px] flex-col items-center p-6 text-center${href ? " lift io" : ""}`}>
       <Seal size={56} />
       <p className="caps mt-4">{label}</p>
       <p className="mono mt-1 text-[.82rem]" style={{ color: "var(--ink)" }}>
         agentId <b style={{ color: "var(--seal)" }}>{id}</b>
       </p>
+      {href && <p className="caps mt-2" style={{ color: "var(--seal)" }}>view history →</p>}
     </div>
   );
+  return href ? (
+    <Link href={href} style={{ textDecoration: "none" }}>{body}</Link>
+  ) : body;
 }
