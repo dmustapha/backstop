@@ -1,0 +1,56 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Dependencies / build artifacts
+**/node_modules
+dist/
+build/
+contracts/out
+contracts/cache
+contracts/lib
+contracts/broadcast
+dashboard/.next
+dashboard/tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Logs & runtime state
+*.log
+.verdict-store.json
+
+# Local working docs (planning, research, and reports — not part of the shipped product)
+.*-state.json
+.url-preverify.json
+ARCHITECTURE.md
+PRD.md
+PLAN.md
+TECH-SPIKE.md
+BUILD-REPORT.md
+CRITIQUE-REPORT.md
+DEBUG-REPORT.md
+FEATURE-OBSERVABLES.md
+STRESS-TEST-PLAN.md
+STRESS-TEST-REPORT.md
+WIRE-REPORT.md
+VERIFY-REPORT.md
+DESIGN-HANDOFF.md
+DESIGN_BRIEF.md
+DESIGN_SYSTEM.md
+DOWNSTREAM-FIXES.md
+concerns.md
+brand.json
+ai/
+warroom/
+research/
+submission/
+spike/
+knowledge/
+design-variations/
+screenshots/
+debug-results/
+
+# OS
+.DS_Store

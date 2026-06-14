@@ -1,0 +1,22 @@
+{
+  "name": "backstop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "keeper": "tsx keeper/src/server.ts",
+    "agent": "tsx agent/src/agent.ts",
+    "seed": "tsx scripts/seed-demo.ts",
+    "register:guardian": "tsx scripts/register-guardian.ts",
+    "test:keeper": "node --import tsx --test keeper/test/*.test.ts",
+    "test:int": "tsx scripts/integration.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "viem": "^2.21.0",
+    "tsx": "^4.19.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  }
+}

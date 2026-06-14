@@ -1,0 +1,249 @@
+/* File: dashboard/app/globals.css
+   Backstop — "The Filing": warm-graphite case-file, single theme, gold wax seal.
+   Ported from design-variations/proposals/proposal-2c-filing-polished.html.
+   Fonts wired to next/font variables (set in layout.tsx). */
+@import "tailwindcss";
+
+/* ───────────────────────── TOKENS — WARM GRAPHITE (single theme) ───────────────────────── */
+:root{
+  /* warm graphite stock — clearly lifted off near-black */
+  --bg:#353027; --surface:#403A30; --surface-2:#4B4339;
+  --border:#5E5544;
+  /* warm off-white ink */
+  --ink:#F7F4ED; --ink-dim:#D0C7B6; --ink-faint:#A09780;
+  --rule:#5E5544; --rule-soft:#4B4339;
+  /* the seal — one brand hue, used as ink only. derivatives by opacity only.
+     --seal-deep is the AA-safe gold (#C8954A) for small gold-on-graphite text */
+  --seal:#E8B466; --seal-deep:#C8954A;
+  --seal-faint:rgba(232,180,102,.06); --seal-dim:rgba(232,180,102,.12);
+  --seal-soft:rgba(232,180,102,.55); --seal-glow:rgba(232,180,102,.32);
+  --seal-edge:rgba(232,180,102,.34);
+  /* semantic verdict only */
+  --ok:#34D399; --ok-ink:#34D399;
+  --veto:#FB7185; --veto-ink:#FB7185;
+  --warn:#FB923C;
+  /* ── SHADOW LADDER — one philosophy: layered warm-black depth, gold glow reserved for the seal & active ruling ── */
+  --lift-1:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.35), 0 16px 40px rgba(0,0,0,.3);
+  --lift-2:0 2px 4px rgba(0,0,0,.5), 0 10px 28px rgba(0,0,0,.45), 0 26px 60px rgba(0,0,0,.4);
+  --lift-3:0 3px 6px rgba(0,0,0,.55), 0 16px 40px rgba(0,0,0,.5), 0 40px 90px rgba(0,0,0,.45);
+  --glow-seal:0 0 32px var(--seal-glow);
+  --glow-rule:0 0 18px var(--seal-glow);
+  /* glass inset top-highlight — the line that turns plastic into glass */
+  --glass-inset:inset 0 1px 0 rgba(255,255,255,.06);
+  /* ── tokenized radius scale (CF-1) ── */
+  --r-xs:4px; --r-sm:6px; --r-md:10px; --r-lg:18px; --r-xl:24px; --r-pill:999px;
+  --serif:var(--font-serif,"DM Serif Display"),Georgia,serif;
+  --sans:var(--font-sans,"IBM Plex Sans"),system-ui,sans-serif;
+  --mono:var(--font-mono,"IBM Plex Mono"),ui-monospace,monospace;
+  /* eased motion curves */
+  --ease-out:cubic-bezier(.2,.7,.2,1);
+  --ease-overshoot:cubic-bezier(.22,1.4,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;letter-spacing:.005em;
+  overflow-x:clip;
+}
+::selection{background:rgba(232,180,102,.25);color:var(--ink)}
+
+/* paper grain — screened over the graphite stock */
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.03;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* ── hero focal glow behind the seal — single radial, aligned to the seal plate ── */
+.hero-glow{position:absolute;z-index:0;pointer-events:none;width:520px;height:520px;
+  top:-40px;right:-60px;border-radius:50%;
+  background:radial-gradient(circle at center, rgba(232,180,102,.16) 0%, rgba(232,180,102,.06) 34%, transparent 68%);
+  filter:blur(8px);}
+
+/* type */
+.serif{font-family:var(--serif);font-weight:400;line-height:.96;letter-spacing:-.012em}
+h1.serif,h2.serif{text-wrap:balance}
+.mono{font-family:var(--mono);font-feature-settings:"ss01","tnum";font-variant-numeric:tabular-nums}
+.caps{text-transform:uppercase;letter-spacing:.22em;font-size:.66rem;font-weight:600;color:var(--ink-faint)}
+.measure{max-width:64ch}
+.prose-measure{max-width:58ch;line-height:1.6}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* hairline rules */
+.rule{border-top:1px solid var(--rule)}
+.rule-b{border-bottom:1px solid var(--rule)}
+
+/* scroll anchoring for nav jumps */
+[id]{scroll-margin-top:5.5rem}
+
+/* ─────────── THE SEAL (pure CSS gold wax seal) ─────────── */
+.seal{position:relative;width:var(--s,96px);height:var(--s,96px);border-radius:50%;display:grid;place-items:center;flex:none;
+  background:radial-gradient(circle at 38% 32%, color-mix(in oklab,var(--seal) 78%,#fff) 0%, var(--seal) 38%, var(--seal-deep) 100%);
+  box-shadow:inset 0 2px 4px rgba(255,255,255,.55), inset 0 -3px 8px rgba(120,80,20,.4), 0 0 0 1px rgba(232,180,102,.12), 0 4px 22px var(--seal-glow), var(--lift-1);
+}
+.seal::before{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(120,80,20,.45);}
+.seal::after{content:"";position:absolute;inset:13%;border-radius:50%;border:1px solid rgba(255,255,255,.3);}
+.seal .glyph{position:relative;z-index:2;font-family:var(--serif);color:#3a2608;font-size:calc(var(--s,96px)*.42);text-shadow:0 1px 0 rgba(255,255,255,.4);line-height:1}
+.seal .arc{position:absolute;inset:0;z-index:2}
+.seal .arc text{font-family:var(--mono);font-size:calc(var(--s,96px)*.085);fill:#4a3110;letter-spacing:.18em;font-weight:600}
+/* periodic shimmer sweep across the gold — oklab gradient sheen, GPU transform only */
+.seal .sheen{position:absolute;inset:0;border-radius:50%;z-index:1;pointer-events:none;overflow:hidden;}
+.seal .sheen::after{content:"";position:absolute;top:-60%;left:-60%;width:80%;height:220%;
+  background:linear-gradient(105deg in oklab, transparent 0%, rgba(255,255,255,.42) 48%, rgba(255,255,255,.55) 52%, transparent 100%);
+  transform:translateX(-180%) rotate(8deg);
+  animation:seal-shimmer 7s ease-in-out 1.4s infinite;}
+
+/* ─────────── verdict stamp (pressed ink) ─────────── */
+.stamp{font-family:var(--serif);display:inline-flex;align-items:center;gap:.4em;
+  padding:.18em .55em;border:2.5px solid currentColor;border-radius:7px;letter-spacing:.06em;
+  text-transform:uppercase;line-height:1;transform:rotate(-2.2deg);opacity:.95;
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,currentColor 30%,transparent);}
+.stamp-veto{color:var(--veto-ink)}
+.stamp-ok{color:var(--ok-ink);transform:rotate(1.6deg)}
+/* verdict-land — stamp presses in when its exhibit is revealed */
+.io.seen .stamp{animation:verdict-land .55s var(--ease-overshoot) both;animation-delay:.18s}
+.io.seen .stamp-ok{animation-name:verdict-land-ok}
+
+/* exhibit tab */
+.exhibit-no{font-family:var(--mono);font-weight:600;color:var(--seal);font-size:.7rem;letter-spacing:.14em}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:.4em;font-size:.7rem;font-family:var(--mono);
+  padding:.22em .6em;border-radius:var(--r-pill);border:1px solid var(--rule);color:var(--ink-dim);background:var(--surface)}
+.pill-seal{border-color:var(--seal-edge);color:var(--seal);background:var(--seal-dim)}
+.pill-ok{border-color:color-mix(in oklab,var(--ok) 50%,var(--rule));color:var(--ok-ink)}
+.pill-veto{border-color:color-mix(in oklab,var(--veto) 50%,var(--rule));color:var(--veto-ink)}
+.dot{width:6px;height:6px;border-radius:50%}
+/* always-on streaming pulse pip */
+.pip{position:relative}
+.pip::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;
+  animation:pulse 2.4s var(--ease-out) infinite}
+
+/* document card (the filing surface) */
+.filing{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-lg);box-shadow:var(--lift-1);
+  transition:box-shadow .4s var(--ease-out),transform .4s var(--ease-out),border-color .3s var(--ease-out)}
+@media (hover: hover) {.filing.lift:hover{box-shadow:var(--lift-2);transform:translateY(-3px);border-color:var(--seal-edge)} }
+
+/* delta ledger */
+.ledger{font-family:var(--mono);font-size:.82rem;width:100%;border-collapse:collapse}
+.ledger td{padding:.42rem 0;border-top:1px solid var(--rule-soft)}
+.ledger tr:first-child td{border-top:none}
+.ledger .num{text-align:right;font-variant-numeric:tabular-nums}
+.in{color:var(--ok-ink)} .out{color:var(--veto-ink)}
+
+/* copy affordance */
+.copy{font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);border:1px solid var(--rule);
+  background:var(--surface);border-radius:var(--r-sm);padding:.15em .45em;cursor:pointer;
+  transition:color .18s var(--ease-out),border-color .18s var(--ease-out),background .18s var(--ease-out),transform .18s var(--ease-out)}
+@media (hover: hover) {.copy:hover{color:var(--seal);border-color:var(--seal-edge);background:var(--seal-dim);transform:translateY(-1px)} }
+.copy.done{color:var(--ok-ink);border-color:color-mix(in oklab,var(--ok) 50%,var(--rule))}
+
+a.exlink{color:var(--seal);text-decoration:none;border-bottom:1px solid var(--seal-edge);transition:opacity .2s var(--ease-out),border-color .2s var(--ease-out)}
+@media (hover: hover) {a.exlink:hover{opacity:.7;border-bottom-color:var(--seal)} }
+
+/* focus — gold rings everywhere */
+:focus-visible{outline:2px solid var(--seal);outline-offset:3px;border-radius:var(--r-xs)}
+a:focus-visible,button:focus-visible{box-shadow:0 0 0 4px rgba(232,180,102,.18)}
+
+/* ─────────── MOTION (orchestrated, restrained, never frozen) ─────────── */
+@keyframes seal-press{
+  0%{transform:scale(1.5) rotate(-12deg);opacity:0}
+  55%{transform:scale(.93) rotate(2deg);opacity:1}
+  78%{transform:scale(1.04) rotate(-1deg)}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+@keyframes seal-shimmer{
+  0%{transform:translateX(-180%) rotate(8deg)}
+  18%,100%{transform:translateX(320%) rotate(8deg)}
+}
+@keyframes rule-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ink-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes exhibit-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes verdict-land{0%{transform:scale(1.35) rotate(-9deg);opacity:0}60%{transform:scale(.97) rotate(-1deg);opacity:1}100%{transform:scale(1) rotate(-2.2deg);opacity:.95}}
+@keyframes verdict-land-ok{0%{transform:scale(1.35) rotate(7deg);opacity:0}60%{transform:scale(.97) rotate(1deg);opacity:1}100%{transform:scale(1) rotate(1.6deg);opacity:.95}}
+@keyframes seal-spin{to{transform:rotate(360deg)}}
+@keyframes seal-fill{to{stroke-dashoffset:0}}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}70%{transform:scale(2.6);opacity:0}100%{transform:scale(2.6);opacity:0}}
+@keyframes value-flash{0%{color:var(--seal);text-shadow:0 0 12px var(--seal-glow)}100%{color:inherit;text-shadow:none}}
+
+.anim-seal{animation:seal-press 1s var(--ease-overshoot) both}
+.anim-rise{opacity:0;animation:ink-rise .8s var(--ease-out) both}
+.anim-draw{transform-origin:left;animation:rule-draw .9s cubic-bezier(.7,0,.3,1) both}
+.d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}.d4{animation-delay:.6s}.d5{animation-delay:.75s}
+.flash{animation:value-flash .9s var(--ease-out)}
+
+/* IO reveal for exhibits */
+.io{opacity:0}
+.io.seen{animation:exhibit-rise .7s var(--ease-out) both}
+
+@media(prefers-reduced-motion:reduce){
+  /* TAMED, not killed: keep gentle opacity, drop transforms & loops, settle instantly */
+  .anim-seal,.anim-rise,.anim-draw{animation-duration:.4s !important;animation-delay:0 !important;animation-name:fade-tame !important}
+  .io,.io.seen{opacity:1 !important;animation:none !important}
+  .io.seen .stamp{animation:none !important}
+  .seal .sheen::after{animation:none !important;opacity:0}
+  .pip::after{animation:none !important;opacity:0}
+  .spinner-seal{animation:none !important}
+  .flash{animation:none !important}
+  html{scroll-behavior:auto}
+}
+@keyframes fade-tame{from{opacity:0}to{opacity:1}}
+
+/* ── nav — GLASS (inset top-highlight mandatory) ── */
+.masthead{
+  background:rgba(255,255,255,.04);
+  backdrop-filter:saturate(1.2) blur(12px);
+  -webkit-backdrop-filter:saturate(1.2) blur(12px);
+  box-shadow:var(--glass-inset), 0 1px 0 rgba(0,0,0,.4), 0 8px 30px rgba(0,0,0,.25);
+}
+.navlink{color:var(--ink-dim);text-decoration:none;font-size:.82rem;letter-spacing:.04em;
+  transition:color .2s var(--ease-out);position:relative}
+.navlink::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--seal);
+  transition:right .25s var(--ease-out);}
+@media (hover: hover) {.navlink:hover{color:var(--ink)} .navlink:hover::after{right:0} }
+.navlink[aria-current="page"]{color:var(--ink)}
+.navlink[aria-current="page"]::after{right:0}
+
+/* sandbox input */
+.field label{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;display:block}
+.field input{width:100%;margin-top:.35rem;font-family:var(--mono);font-size:.82rem;color:var(--ink);
+  background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm);padding:.6rem .7rem;
+  transition:border-color .2s var(--ease-out),box-shadow .2s var(--ease-out)}
+.field input:focus{border-color:var(--seal-edge);outline:none;box-shadow:0 0 0 3px rgba(232,180,102,.12)}
+/* crisp 13px mono on desktop (approved look); 16px on touch to defeat the iOS focus-zoom bug */
+@media (pointer: coarse){ .field input{font-size:16px} }
+.btn-run{font-family:var(--sans);font-weight:600;letter-spacing:.02em;color:#2a1c05;
+  background:linear-gradient(180deg in oklab,color-mix(in oklab,var(--seal) 88%,#fff),var(--seal));
+  border:1px solid var(--seal-deep);border-radius:var(--r-md);padding:.7rem 1.2rem;cursor:pointer;
+  box-shadow:0 4px 18px var(--seal-glow), var(--lift-1);
+  transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out)}
+@media (hover: hover) {.btn-run:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--seal-glow), var(--lift-2)} }
+.btn-run:active{transform:translateY(0)}
+.btn-run:disabled{opacity:.6;cursor:wait}
+.btn-ghost{transition:transform .16s var(--ease-out),border-color .2s var(--ease-out),color .2s var(--ease-out)}
+@media (hover: hover) {.btn-ghost:hover{transform:translateY(-2px);border-color:var(--seal-edge);color:var(--ink)} }
+
+/* spinner seal — Tier-B gold seal-forming */
+.spinner-seal{width:54px;height:54px;animation:seal-spin 2.6s linear infinite}
+.spinner-seal circle{fill:none;stroke:var(--seal);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:150;stroke-dashoffset:150;animation:seal-fill 8s cubic-bezier(.4,0,.2,1) forwards;
+  filter:drop-shadow(0 0 6px var(--seal-glow))}
+.spinner-track{stroke:var(--rule) !important;stroke-dasharray:none !important;stroke-dashoffset:0 !important;animation:none !important;opacity:.6;filter:none !important}
+
+.section-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--seal)}
+
+/* ── GLASS panes (result card + seal plate) with mandatory inset top-highlight ── */
+.glass{
+  background:rgba(255,255,255,.04);
+  backdrop-filter:saturate(1.2) blur(12px);
+  -webkit-backdrop-filter:saturate(1.2) blur(12px);
+  box-shadow:var(--glass-inset), var(--lift-2);
+}
+/* ── liquid-glass mask-composite gradient edge — top/bottom-bright premium border (seal plate) ── */
+.glass-edge{position:relative}
+.glass-edge::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(180deg in oklab, rgba(232,180,102,.55), rgba(232,180,102,.05) 38%, rgba(232,180,102,.05) 62%, rgba(255,255,255,.28));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;}
+
+/* exhibit ★-starred (the mismatch beat) — gold-edged filing */
+.filing-starred{border-color:var(--seal-edge);box-shadow:var(--lift-1),var(--glow-rule)}
