@@ -6,11 +6,12 @@ import { SIMULATOR_ABI } from "../../shared/abis";
 import { WATCHED_TOKENS, ALLOWLIST, PUBLIC_RPC_URL } from "../../shared/addresses";
 import type { PendingCall, SimResult, WatchSet } from "../../shared/types";
 
-// BackstopSimulator deployed bytecode (from `forge build`); path relative to project root.
+// BackstopSimulator deployed bytecode (extracted from `forge build` into a committed file so the
+// keeper is self-contained at runtime — contracts/out/ is a build artifact and not shipped).
 const ARTIFACT = JSON.parse(
-  readFileSync(new URL("../../contracts/out/BackstopSimulator.sol/BackstopSimulator.json", import.meta.url), "utf8"),
+  readFileSync(new URL("./sim-bytecode.json", import.meta.url), "utf8"),
 );
-const SIM_BYTECODE: Hex = ARTIFACT.deployedBytecode.object;
+const SIM_BYTECODE: Hex = ARTIFACT.deployedBytecode;
 
 const SANDBOX_BALANCE = parseEther("1000"); // baseline; delta sign is invariant to baseline
 
