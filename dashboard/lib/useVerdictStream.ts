@@ -9,7 +9,21 @@ export function useVerdictStream(account?: string): VerdictDTO[] {
 
   useEffect(() => {
     let alive = true;
-    fetchVerdicts(50, account).then((v) => { if (alive) setItems(v); });
+    let retry: ReturnType<typeof setTimeout> | undefined;
+
+    // Cold-start cover: Render's free tier sleeps after ~15 min idle and takes ~50s to wake. During
+    // that window fetchVerdicts() returns [] (the keeper isn't answering yet). Instead of leaving the
+    // feed on its empty state until a manual reload, keep re-fetching until the keeper responds — the
+    // feed then self-populates. SSE handles live pushes once it's up.
+    let attempt = 0;
+    const load = () => {
+      fetchVerdicts(50, account).then((v) => {
+        if (!alive) return;
+        if (v.length) { setItems(v); return; }
+        if (attempt++ < 20) retry = setTimeout(load, 3000); // ~60s of cold-start cover
+      });
+    };
+    load();
 
     const es = new EventSource(`${KEEPER_URL}/events`);
     es.onmessage = (e) => {
@@ -21,7 +35,7 @@ export function useVerdictStream(account?: string): VerdictDTO[] {
       } catch { /* ping */ }
     };
     es.onerror = () => { /* browser auto-reconnects */ };
-    return () => { alive = false; es.close(); };
+    return () => { alive = false; if (retry) clearTimeout(retry); es.close(); };
   }, [account]);
 
   return items;

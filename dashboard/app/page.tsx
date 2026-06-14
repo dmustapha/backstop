@@ -122,10 +122,11 @@ export default function Landing() {
           <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
               <p className="section-tag">On the record</p>
-              <h2 className="serif mt-2" style={{ fontSize: "clamp(1.9rem,4vw,3rem)" }}>Nothing here is a mock</h2>
+              <h2 className="serif mt-2" style={{ fontSize: "clamp(1.9rem,4vw,3rem)" }}>Verify every verdict yourself</h2>
               <p className="prose-measure mt-4" style={{ color: "var(--ink-dim)", maxWidth: "54ch", lineHeight: 1.6 }}>
-                Identity on both sides of the table — guardian and guarded agent, each registered on-chain under
-                ERC-8004. Every veto and co-sign settles a real event on Mantle Sepolia.
+                Both sides hold an ERC-8004 identity on-chain — the guardian and the agent it guards. Every veto
+                lands a real <span className="mono">Blocked</span> event on Mantle Sepolia, reason and all. Click
+                any verdict through to the explorer and read it for yourself.
               </p>
               <LiveStat className="mt-8" />
               <div className="mt-8 flex flex-wrap gap-3">

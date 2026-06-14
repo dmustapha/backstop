@@ -36,7 +36,13 @@ export default function Console() {
       <div className="space-y-6">
         {verdicts.length === 0 && (
           <div className="filing grid place-items-center p-16 text-center" style={{ borderStyle: "dashed" }}>
-            <p className="caps">Waiting for the agent to act…</p>
+            <p className="caps inline-flex items-center gap-2">
+              <span className="dot pip" style={{ background: "var(--seal)" }} />
+              Connecting to the keeper…
+            </p>
+            <p className="mt-2 text-[.82rem]" style={{ color: "var(--ink-dim)" }}>
+              The guardian is waking — the record loads in a moment.
+            </p>
           </div>
         )}
         {verdicts.map((v) => (
