@@ -8,9 +8,17 @@ Backstop is a guardian that sits between an autonomous agent and the chain. Ever
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-16_passing-brightgreen)]()
 
+**Live:** [backstop-alpha.vercel.app](https://backstop-alpha.vercel.app)
+
 ---
 
 ![Backstop](docs/images/landing.png)
+
+## Live Demo
+
+**[backstop-alpha.vercel.app](https://backstop-alpha.vercel.app)**
+
+Open the live console to watch the verdict feed, then head to the sandbox and paste any Mantle Sepolia transaction to get a real simulated verdict. Every card on the proof page links straight to the block explorer.
 
 ## What Is Backstop?
 

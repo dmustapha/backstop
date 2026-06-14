@@ -54,3 +54,7 @@ debug-results/
 
 # OS
 .DS_Store
+
+# Vercel
+.vercel
+.env.local
