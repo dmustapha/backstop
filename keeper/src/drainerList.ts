@@ -1,6 +1,6 @@
 // File: keeper/src/drainerList.ts
 // Bundled known-drainer list — sourced from ethereum-lists (MyEtherWallet), MIT-licensed.
-// This is the keeper's offline threat-intel fallback: ~700 real EVM addresses flagged for
+// This is the keeper's offline threat-intel fallback: 652 real EVM addresses flagged for
 // phishing/scam/drainer activity. It is NOT a live oracle. The documented live upgrade path is
 // GoPlus address_security (free, no-key, supports Mantle 5000) → Nansen (paid). See keeper/src/nansen.ts.
 import { readFileSync } from "node:fs";

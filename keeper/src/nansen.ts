@@ -14,7 +14,7 @@ const DRAINER_HINTS = ["drainer", "scam", "phish", "exploit", "malicious", "hack
 /**
  * Look up malicious labels for an address. Resolution order:
  *   1. Nansen live (only if NANSEN_API_KEY present) — paid upgrade, [UNVERIFIED] endpoint, non-load-bearing.
- *   2. Bundled known-drainer list — sourced from ethereum-lists (MIT), ~700 real flagged addresses.
+ *   2. Bundled known-drainer list — sourced from ethereum-lists (MIT), 652 real flagged addresses.
  *   3. STATIC_DRAINERS env (the demo drainer + any operator-pinned addresses).
  * Live upgrade path (documented, no key needed): GoPlus address_security on Mantle 5000.
  */
