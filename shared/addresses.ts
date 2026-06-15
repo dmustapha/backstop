@@ -3,7 +3,10 @@ import { defineChain, type Address } from "viem";
 
 export const RPC_URL = process.env.MANTLE_RPC_URL ?? "https://rpc.sepolia.mantle.xyz";
 export const PUBLIC_RPC_URL = "https://rpc.sepolia.mantle.xyz"; // eth_call sim always works here
-export const KEEPER_URL = process.env.KEEPER_URL ?? "http://localhost:8787";
+// Onboarding default = the HOSTED Backstop guardian keeper (Mode A: zero infra, trust the hosted
+// guardian). A self-hosted guardian (Mode B: trustless) overrides via KEEPER_URL or wrap({ keeperUrl }).
+// Local-only dev sets KEEPER_URL=http://localhost:8787 in .env.
+export const KEEPER_URL = process.env.KEEPER_URL ?? "https://backstop-keeper.onrender.com";
 export const CHAIN_ID = 5003;
 
 export const mantleSepolia = defineChain({
