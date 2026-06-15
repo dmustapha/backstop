@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "keeper": "tsx keeper/src/server.ts",
-    "agent": "tsx agent/src/agent.ts",
-    "seed": "tsx scripts/seed-demo.ts",
-    "register:guardian": "tsx scripts/register-guardian.ts",
+    "agent": "node --env-file-if-exists=.env --import tsx agent/src/agent.ts",
+    "seed": "node --env-file-if-exists=.env --import tsx scripts/seed-demo.ts",
+    "onboard:fresh": "node --env-file-if-exists=.env --import tsx scripts/onboard-fresh.ts",
+    "register:guardian": "node --env-file-if-exists=.env --import tsx scripts/register-guardian.ts",
     "test:keeper": "node --import tsx --test keeper/test/*.test.ts",
-    "test:int": "tsx scripts/integration.ts"
+    "test:int": "node --env-file-if-exists=.env --import tsx scripts/integration.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",

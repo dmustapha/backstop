@@ -7,7 +7,8 @@ import { CopyButton } from "../components/CopyButton";
 const HOSTED_KEEPER = "https://backstop-keeper.onrender.com";
 
 // Mode A — hosted guardian (zero infra). Real, copy-pasteable against the live keeper.
-const INTEGRATE_SNIPPET = `import { wrap } from "@backstop/sdk";
+const INTEGRATE_SNIPPET = `// SDK ships in this repo at sdk/ (not yet published to npm)
+import { wrap } from "@backstop/sdk";
 
 // Wrap your agent's key once. Deploys a guarded account + ERC-8004 identity.
 const agent = await wrap(AGENT_KEY, {
