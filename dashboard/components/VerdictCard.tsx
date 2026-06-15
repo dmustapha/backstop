@@ -70,7 +70,7 @@ export function VerdictCard({ v, starred = false }: { v: VerdictDTO; starred?: b
             ))
           )}
 
-          <DeltaTable deltas={v.deltas} />
+          <DeltaTable deltas={v.deltas} decision={v.decision} />
 
           {v.txHash && (
             <p className="mt-4 text-[.82rem]">
