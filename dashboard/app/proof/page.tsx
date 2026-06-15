@@ -26,6 +26,15 @@ const BEATS: { n: string; label: string; decision: "VETO" | "COSIGN"; detail: st
   { n: "6", label: "intent ↔ calldata mismatch", decision: "VETO", detail: "Tier-B · judged by: altllm", tx: "0xca732869fc64ca229f4f424a55953a0613ac8db49f3675e2cfe22a50b363098d", star: true },
 ];
 
+// Exhibit D — a brand-new agent onboarded LIVE against the hosted guardian (scripts/onboard-fresh.ts).
+// Proves Mode A end-to-end: a never-seen key is wrapped on-chain, then immediately guarded.
+const ONBOARD: { label: string; note: string; value: string; kind: "addr" | "tx" }[] = [
+  { label: "Fresh agent key — never seen before", note: "owner", value: "0xe704Fb38619732f3990966E72A84050e0Ba1177D", kind: "addr" },
+  { label: "Guarded account deployed live", note: "BackstopAccount · ERC-8004 agentId 216", value: "0xa36Aa5C4402C229ad6Ef50D1f2A58DB5ACC4DE96", kind: "addr" },
+  { label: "Drainer proposed → VETO", note: "on-chain Blocked · guardian-paid", value: "0x3620cebfb636d7a30f71c680260c96da7232ffed828a010bd5ed59cce9451fb5", kind: "tx" },
+  { label: "Legit call proposed → COSIGN", note: "on-chain execute · agent-paid", value: "0xb2ba570909e5e74f14f8b90b9c434a4bd9a792db84628e1d8015d2e8e117f451", kind: "tx" },
+];
+
 // Product-framed proof points — what the system demonstrates (no track/hackathon references).
 const PROVES: { title: string; body: string }[] = [
   { title: "A reusable guardian primitive", body: "backstop.wrap() adds a veto-only co-signer to any agent in about three lines — the guarding logic is a drop-in, not a fork." },
@@ -110,6 +119,27 @@ export default function Proof() {
         </div>
       </div>
 
+      {/* Exhibit D · Live onboarding proof */}
+      <div className="mt-10">
+        <p className="caps mb-1">Exhibit D · Live onboarding (a fresh agent, wrapped on-chain)</p>
+        <div className="filing mt-3 overflow-hidden">
+          {ONBOARD.map((o, i) => (
+            <div key={o.value} className={`${i < ONBOARD.length - 1 ? "rule-b " : ""}grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-4 sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_auto]`}>
+              <div>
+                <div className="text-[.92rem]" style={{ color: "var(--ink)" }}>{o.label}</div>
+                <div className="caps" style={{ marginTop: ".15rem" }}>{o.note}</div>
+              </div>
+              <div className="mono truncate text-[.8rem]" style={{ color: "var(--ink-dim)" }} title={o.value}>{short(o.value)}</div>
+              <a className="exlink mono text-[.74rem]" href={o.kind === "tx" ? txLink(o.value) : addrLink(o.value)} target="_blank" rel="noreferrer">explorer ↗</a>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-[.8rem]" style={{ color: "var(--ink-faint)", lineHeight: 1.6 }}>
+          Reproduce it: <span className="mono">node --env-file=.env --import tsx scripts/onboard-fresh.ts</span> wraps
+          a new key against the hosted guardian and prints these exact hashes.
+        </p>
+      </div>
+
       {/* What this proves (product framing) */}
       <div className="mt-12">
         <p className="caps mb-1">What this proves</p>
@@ -122,8 +152,9 @@ export default function Proof() {
           ))}
         </div>
         <p className="mt-8 text-[.82rem]" style={{ color: "var(--ink-faint)", lineHeight: 1.6 }}>
-          In short: a veto-only co-signer with ERC-8004 identity on both sides (agentId 182 + 183) and{" "}
-          <span className="mono">wrap()</span> onboarding — guardian and guarded agent, each registered on-chain.
+          In short: a veto-only co-signer with ERC-8004 identity on both sides (agentId 182 + 183), proven{" "}
+          <span className="mono">wrap()</span> onboarding — a brand-new agent (agentId 216) wrapped and guarded
+          live on-chain, drainer vetoed and legit call co-signed in the same run.
         </p>
       </div>
     </section>
