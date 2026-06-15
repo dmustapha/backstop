@@ -3,7 +3,7 @@
 // These tests prove the SECURITY INVARIANT: the deterministic floor is authoritative and a drain to a
 // non-allowlisted recipient is VETOED even when the LLM is forced to COSIGN. No network, no on-chain tx.
 //
-// Hermetic env (GUARDIAN_KEY / MANTLE_RPC_URL / NANSEN / STATIC_DRAINERS) is applied by ./setup, which
+// Hermetic env (GUARDIAN_KEY / MANTLE_RPC_URL / THREATINTEL / STATIC_DRAINERS) is applied by ./setup, which
 // MUST be imported FIRST because ES imports hoist above statements — the env has to be set before
 // clients.ts (imported transitively by the classifier) runs its GUARDIAN_KEY guard.
 // BACKSTOP_TEST_LLM is toggled per-test below to force the Tier-B provider verdict deterministically.

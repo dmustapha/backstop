@@ -44,7 +44,7 @@ export const ALLOWLIST: Address[] = [AGNI_ROUTER, AGNI_QUOTER, WMNT_USDC_POOL, W
 // the set of tokens the simulator watches by default
 export const WATCHED_TOKENS: Address[] = [WMNT, USDC, USDT];
 
-// static known-drainer list (Nansen fallback). 0xEVIL demo target appended by seed-demo via env.
+// static known-drainer list (offline fallback). 0xEVIL demo target appended by seed-demo via env.
 export const STATIC_DRAINERS: Address[] = (
   (process.env.STATIC_DRAINERS ?? "").split(",").map((s) => s.trim()).filter(Boolean) as Address[]
 );

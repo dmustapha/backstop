@@ -1,11 +1,11 @@
-// File: keeper/src/nansen.ts
+// File: keeper/src/threatIntel.ts
 import type { Address } from "viem";
 import { STATIC_DRAINERS } from "../../shared/addresses";
 import { lookupDrainer } from "./drainerList";
 
 export interface LabelResult {
   flagged: boolean;
-  source: "nansen" | "ethereum-lists" | "static" | "none";
+  source: "live" | "ethereum-lists" | "static" | "none";
   labels: string[];
 }
 
@@ -13,17 +13,19 @@ const DRAINER_HINTS = ["drainer", "scam", "phish", "exploit", "malicious", "hack
 
 /**
  * Look up malicious labels for an address. Resolution order:
- *   1. Nansen live (only if NANSEN_API_KEY present) — paid upgrade, [UNVERIFIED] endpoint, non-load-bearing.
+ *   1. Live threat-intel provider (only if THREATINTEL_API_KEY + THREATINTEL_API_URL present) —
+ *      optional paid upgrade, [UNVERIFIED] endpoint, non-load-bearing.
  *   2. Bundled known-drainer list — sourced from ethereum-lists (MIT), 652 real flagged addresses.
  *   3. STATIC_DRAINERS env (the demo drainer + any operator-pinned addresses).
  * Live upgrade path (documented, no key needed): GoPlus address_security on Mantle 5000.
  */
 export async function labelAddress(addr: Address): Promise<LabelResult> {
-  const key = process.env.NANSEN_API_KEY;
-  if (key) {
+  const key = process.env.THREATINTEL_API_KEY;
+  const url = process.env.THREATINTEL_API_URL;
+  if (key && url) {
     try {
-      // [UNVERIFIED] exact Nansen label endpoint — fallback path makes this non-load-bearing.
-      const res = await fetch(`https://api.nansen.ai/v1/address/${addr}/labels`, {
+      // [UNVERIFIED] generic provider label endpoint — fallback path makes this non-load-bearing.
+      const res = await fetch(`${url.replace(/\/$/, "")}/address/${addr}/labels`, {
         headers: { "apiKey": key },
         signal: AbortSignal.timeout(2500),
       });
@@ -31,7 +33,7 @@ export async function labelAddress(addr: Address): Promise<LabelResult> {
         const json = (await res.json()) as { labels?: { label: string; category?: string }[] };
         const labels = (json.labels ?? []).map((l) => `${l.category ?? ""}:${l.label}`.toLowerCase());
         const flagged = labels.some((l) => DRAINER_HINTS.some((h) => l.includes(h)));
-        return { flagged, source: "nansen", labels };
+        return { flagged, source: "live", labels };
       }
     } catch { /* fall through to the offline list */ }
   }

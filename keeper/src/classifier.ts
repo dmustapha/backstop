@@ -1,7 +1,7 @@
 // File: keeper/src/classifier.ts
 import { type Address, type Hex } from "viem";
 import { pub } from "./clients";
-import { labelAddress } from "./nansen";
+import { labelAddress } from "./threatIntel";
 import { judge } from "./llm";
 import { ALLOWLIST } from "../../shared/addresses";
 import { DANGEROUS_SELECTORS } from "../../shared/abis";

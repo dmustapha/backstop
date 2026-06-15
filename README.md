@@ -43,7 +43,7 @@ The guardian holds no spending power of its own. It can only co-sign or veto, so
 - **Veto-only co-signer**: the guardian can block or co-sign, never spend. A compromised guardian cannot drain the account it protects.
 - **Live simulation, zero deployment**: an `eth_call` with a code override traces real balance and allowance deltas against current chain state before anything is signed.
 - **Tiered verdict engine**: a deterministic floor co-signs clean traffic, a static known-drainer list vetoes flagged approvals in under a second, and only genuine gray-zone calls reach the LLM.
-- **Intent-vs-calldata check**: the agent's stated intent is weighed against what the calldata actually does, which catches intent-injection where a confident agent approves a drainer it was tricked into.
+- **Intent-vs-calldata check**: the agent's stated intent is weighed against what the calldata does, which catches intent-injection where a confident agent approves a drainer it was tricked into.
 - **Pluggable LLM**: the Tier-B judge runs through any OpenAI-compatible endpoint, with a direct Anthropic path as validated fallback.
 - **Everything on the record**: each veto emits an on-chain `Blocked` event and each approval a `CoSigned` event. The console shows real events, never UI-only labels.
 - **Three-line integration**: `backstop.wrap(account)` puts an existing agent wallet behind the co-signer.
@@ -191,10 +191,10 @@ Every address and hash below is live on Mantle Sepolia and independently verifia
 | Factory (Sourcify-verified) | [`0x46BA…bEd7`](https://sepolia.mantlescan.xyz/address/0x46BA593Cd94a96ba6B6cbfA90681e8952935bEd7) |
 | Guarded account (agentId 183) | [`0x42D7…8919`](https://sepolia.mantlescan.xyz/address/0x42D7bb229f0aB8BBEd38C7B2Fd974892F6B28919) |
 | ERC-8004 IdentityRegistry | [`0x8004…BD9e`](https://sepolia.mantlescan.xyz/address/0x8004A818BFB912233c491871b3d84c89A494BD9e) |
-| Veto — malicious approve to a flagged drainer | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0x53e43348a74799c7aedf717991b56e94e8a9766ee3941eeee3a1218b5f549b63) |
-| Co-sign — settled swap on an allowlisted DEX | [CoSigned tx](https://sepolia.mantlescan.xyz/tx/0x37f8ef0eae66edd62353012e4b3ea8b1cb9030d7112b4180fb8d363588ae5f74) |
-| Veto — unknown-contract intent (LLM tier) | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0xf83a34f4ea3fee884df8125f5b6788c140a4d6a3951483e87c965bc9d223673a) |
-| Veto — intent vs calldata mismatch (LLM tier) | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0xca732869fc64ca229f4f424a55953a0613ac8db49f3675e2cfe22a50b363098d) |
+| Veto: malicious approve to a flagged drainer | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0x53e43348a74799c7aedf717991b56e94e8a9766ee3941eeee3a1218b5f549b63) |
+| Co-sign: settled swap on an allowlisted DEX | [CoSigned tx](https://sepolia.mantlescan.xyz/tx/0x37f8ef0eae66edd62353012e4b3ea8b1cb9030d7112b4180fb8d363588ae5f74) |
+| Veto: unknown-contract intent (LLM tier) | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0xf83a34f4ea3fee884df8125f5b6788c140a4d6a3951483e87c965bc9d223673a) |
+| Veto: intent vs calldata mismatch (LLM tier) | [Blocked tx](https://sepolia.mantlescan.xyz/tx/0xca732869fc64ca229f4f424a55953a0613ac8db49f3675e2cfe22a50b363098d) |
 
 > The drainer list is a static, locally-maintained known-drainer list (no third-party feed is wired in). The UI labels it exactly that. When no live reputation key is configured, Tier-A uses this list rather than claiming a data source it doesn't have.
 
@@ -203,14 +203,14 @@ Every address and hash below is live on Mantle Sepolia and independently verifia
 ## Running Locally
 
 ```bash
-git clone https://gitlab.com/damilolamustaphaa/backstop.git
+git clone https://github.com/dmustapha/backstop.git
 cd backstop
 npm install
 
 # 1. Configure
 cp .env.example .env      # fill in RPC, keys, and deployed addresses
 
-# 2. Contracts (optional — addresses above are already live)
+# 2. Contracts (optional: addresses above are already live)
 cd contracts && forge test && cd ..
 
 # 3. Start the keeper (REST + SSE on :8787)
@@ -234,7 +234,7 @@ cd dashboard && npm install && npm run dev   # http://localhost:3000
 | `LLM_BASE_URL` / `LLM_API_KEY` / `LLM_MODEL` | OpenAI-compatible Tier-B provider |
 | `LLM_FALLBACK` / `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` | Fallback LLM path |
 | `STATIC_DRAINERS` | Comma-separated known-drainer addresses |
-| `NANSEN_API_KEY` | Optional. Blank falls back to the static known-drainer list |
+| `THREATINTEL_API_KEY` | Optional. Blank falls back to the known-drainer list (ethereum-lists) |
 | `NEXT_PUBLIC_KEEPER_URL` | Keeper URL the dashboard calls (set to the hosted keeper in production) |
 
 See `.env.example` for the full annotated list.
@@ -245,9 +245,9 @@ See `.env.example` for the full annotated list.
 
 ```
 backstop/
-├── contracts/          Solidity — BackstopAccount, Factory, ERC-8004 interface, Foundry tests
+├── contracts/          Solidity: BackstopAccount, Factory, ERC-8004 interface, Foundry tests
 ├── keeper/             Verdict engine: simulator, classifier, tiered veto/cosign, LLM, REST + SSE server
-├── dashboard/          Next.js 15 app — landing, live console, sandbox, evidence, agent history
+├── dashboard/          Next.js 15 app: landing, live console, sandbox, evidence, agent history
 ├── agent/              Demo autonomous agent that proposes the transactions
 ├── sdk/                backstop.wrap() integration + ERC-8004 helpers
 ├── shared/             Chain config, addresses, ABIs, shared types
@@ -258,4 +258,4 @@ backstop/
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

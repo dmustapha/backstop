@@ -2,7 +2,7 @@
 
 ## known-drainers.json
 
-Derived from the **ethereum-lists** project (MyEtherWallet) — `addresses-darklist.json`.
+Derived from the **ethereum-lists** project (MyEtherWallet): `addresses-darklist.json`.
 
 - Source: https://github.com/MyEtherWallet/ethereum-lists
 - License: **MIT**

@@ -42,6 +42,12 @@ DESIGN-HANDOFF.md
 DESIGN_BRIEF.md
 DESIGN_SYSTEM.md
 DOWNSTREAM-FIXES.md
+CODEBASE-STATE.md
+DEMO-SCRIPT.md
+DEMO-FOOTGUNS.md
+FINALIZED-PLAN.md
+JUDGING-CRITERIA.md
+TENCENT-INTEGRATION-PLAN.md
 concerns.md
 brand.json
 ai/
@@ -53,6 +59,8 @@ knowledge/
 design-variations/
 screenshots/
 debug-results/
+tasks/
+video/
 
 # OS
 .DS_Store

@@ -3,14 +3,12 @@ import type { VerdictDTO } from "../lib/types";
 import { txLink, addrLink } from "../lib/api";
 import { DeltaTable } from "./DeltaTable";
 
-// [CRITIQUE E-1] Honest label-source badge. The verdict's label source is only carried in the
-// reasons text as a `nansen:<label>` or `static:<label>` token (e.g. "static:known-drainer").
-// We derive the badge from that — and NEVER claim Nansen unless the source is literally nansen.
-function labelBadge(reasons: string[]): { text: string; nansen: boolean } | null {
+// [CRITIQUE E-1] Honest label-source badge. The verdict's label source is carried in the reasons
+// text as a `known-drainer:<source>` or `static:<label>` token (e.g. "static:known-drainer").
+// The badge always reflects the offline sourced list — we never claim a live oracle.
+function labelBadge(reasons: string[]): { text: string } | null {
   const blob = reasons.join(" ");
-  const nansen = blob.match(/nansen:([^\s,)\]]+)/i);
-  if (nansen) return { text: `Nansen: ${nansen[1]}`, nansen: true };
-  if (/static:known-drainer|static:/i.test(blob)) return { text: "known-drainer list", nansen: false };
+  if (/known-drainer|static:/i.test(blob)) return { text: "known-drainer list" };
   return null;
 }
 
