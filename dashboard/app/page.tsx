@@ -2,6 +2,24 @@
 import Link from "next/link";
 import { Seal } from "../components/Seal";
 import { LiveStat } from "../components/LiveStat";
+import { CopyButton } from "../components/CopyButton";
+
+const HOSTED_KEEPER = "https://backstop-keeper.onrender.com";
+
+// Mode A — hosted guardian (zero infra). Real, copy-pasteable against the live keeper.
+const INTEGRATE_SNIPPET = `import { wrap } from "@backstop/sdk";
+
+// Wrap your agent's key once. Deploys a guarded account + ERC-8004 identity.
+const agent = await wrap(AGENT_KEY, {
+  keeperUrl: "${HOSTED_KEEPER}",   // hosted guardian
+});
+
+// Route every action through propose(). Backstop simulates it on live
+// Mantle, co-signs the safe ones, and vetoes drainers with an on-chain event.
+const { decision, txHash } = await agent.propose(to, value, data, {
+  statedGoal: "swap 2 WMNT for USDC on Agni",
+  expectedTargets: [AGNI_ROUTER],
+});`;
 
 const STEPS = [
   {
@@ -116,6 +134,37 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── INTEGRATE ── */}
+      <section className="rule-b rule mx-auto max-w-[1140px] px-6 py-24">
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+          <div className="min-w-0 lg:w-[40%]">
+            <p className="section-tag io">Adopt it</p>
+            <h2 className="serif io mt-2" style={{ fontSize: "clamp(1.9rem,4vw,3rem)", lineHeight: 1.08 }}>
+              Two lines, and your agent is guarded.
+            </h2>
+            <p className="prose-measure io mt-5" style={{ color: "var(--ink-dim)", maxWidth: "46ch", lineHeight: 1.62 }}>
+              Point your agent&rsquo;s key at the hosted guardian and route its calls through{" "}
+              <span className="mono" style={{ color: "var(--ink)" }}>propose()</span>. No contracts to write, no
+              infra to run &mdash; the keeper is account-agnostic, so it guards a brand-new agent the moment you wrap it.
+            </p>
+            <div className="filing io mt-8 p-5" style={{ background: "var(--seal-faint)" }}>
+              <p className="caps" style={{ color: "var(--seal-deep)" }}>Trust model</p>
+              <p className="mt-2 text-[.88rem]" style={{ color: "var(--ink-dim)", lineHeight: 1.55 }}>
+                The hosted guardian is a <b style={{ color: "var(--ink)" }}>testnet reference</b> &mdash; convenient
+                for a demo, trusted for liveness. For production, self-host the keeper with your own{" "}
+                <span className="mono">GUARDIAN_KEY</span> (<span className="mono">npm run keeper</span>) and pass
+                your own <span className="mono">{`{ guardian, keeperUrl }`}</span>. Either way the guardian is
+                veto-only &mdash; it can never move your funds.
+              </p>
+            </div>
+          </div>
+
+          <div className="min-w-0 flex-1 io">
+            <CodeBlock code={INTEGRATE_SNIPPET} />
+          </div>
+        </div>
+      </section>
+
       {/* ── PROOF TEASER ── */}
       <section className="rule-b rule" style={{ background: "color-mix(in oklab,var(--seal-faint) 60%,var(--surface))" }}>
         <div className="mx-auto max-w-[1140px] px-6 py-24">
@@ -149,6 +198,30 @@ export default function Landing() {
         </div>
       </section>
     </>
+  );
+}
+
+function CodeBlock({ code }: { code: string }) {
+  return (
+    <div className="filing relative overflow-hidden" style={{ background: "var(--surface-2)", padding: 0 }}>
+      <div
+        className="flex items-center justify-between px-4 py-2"
+        style={{ borderBottom: "1px solid var(--rule)", background: "var(--surface)" }}
+      >
+        <span className="caps">agent.ts</span>
+        <CopyButton value={code} />
+      </div>
+      <pre
+        className="mono overflow-x-auto px-4 py-4 text-[.8rem]"
+        style={{ lineHeight: 1.7, color: "var(--ink-dim)", margin: 0 }}
+      >
+        {code.split("\n").map((line, i) => (
+          <div key={i} style={line.trim().startsWith("//") ? { color: "var(--ink-faint)" } : undefined}>
+            {line || " "}
+          </div>
+        ))}
+      </pre>
+    </div>
   );
 }
 
