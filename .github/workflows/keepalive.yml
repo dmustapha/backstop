@@ -1,0 +1,34 @@
+name: keep-keeper-warm
+
+# Render's free tier spins the keeper down after ~15 min idle, adding a ~50s
+# cold start to the next request. This pings the health endpoint every 5 minutes
+# (GitHub's minimum cron granularity; firing is best-effort and may run late) so
+# the dashboard sandbox responds instantly during demos.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping keeper
+        run: |
+          URL="https://backstop-keeper.onrender.com/verdicts?limit=1"
+          for i in 1 2 3; do
+            if curl -fsS --max-time 90 "$URL" -o /dev/null; then
+              echo "keeper responded (attempt $i)"
+              exit 0
+            fi
+            echo "attempt $i failed; waiting out the cold-start window..."
+            sleep 20
+          done
+          echo "keeper did not respond after 3 attempts"
+          exit 1
